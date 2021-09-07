@@ -19,5 +19,8 @@ Solution:
 - Make sure we are not accessing/reading from window obejct anywhere and only use it in subscribe method.
 
 
-
+Local Development 
+- Run npm start from the container folder and navigate to localhost:8080
+- Run npm start from the marketing folder to fire up the mfe app.
+- Toggle the Button in the Header to see how the User state defined in Container updates in both places.
 
