@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState} from 'react';
+import React, { useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MaterialLink from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
-import { subscribeToGlobalState, getAppRoutes } from 'container/GlobalState';
+import globalStoreInstance from '../global-state/store';
+import { useSnapshot } from 'valtio'
 
 function Copyright() {
   return (
@@ -37,51 +38,16 @@ const useStyles = makeStyles((theme) => ({
   heroButtons: {
     marginTop: theme.spacing(4),
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
 }));
 
-export default function Album() {
-  const [user, setUser] = useState<{name: string} | undefined>();
+const Home = () => {
+  const {user} = useSnapshot(globalStoreInstance);
 
   const classes = useStyles();
-
-  const routePath = useMemo(() => {
-      const allRoutes = getAppRoutes();
-      const order = allRoutes.filter((rt: {app: string, routes: any }) => rt.app == 'order');
-      if (order) {
-        //@ts-ignore
-        return order[0].routes.checkout;
-      }
-      return '/mfe-marketing/pricing' 
-  }, []);
-
-  useEffect(() => {
-    const unSub = subscribeToGlobalState((state: {user: {name: string}}) => {
-      console.log('marketing', state);
-      const currentUser = state ? state.user : undefined;
-      setUser(currentUser);
-    });
-
-    return () => { unSub() };
-  }, []);
 
   return (
     <React.Fragment>
@@ -96,24 +62,31 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Marketing App 
-             Current User --- {user ? user.name : ''}
+              Container App Dummy User --- {user ? user.name : ''}
+            </Typography>
+            <Typography
+              variant="h5"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              This is a dummy site.This is a Micro FE App, consiting of 3 micro front ends, the Conatiner App, Marketing App and Order App.
             </Typography>
             <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
+              <Grid container spacing={6} justify="center">
                 <Grid item>
-                  <Link to="/mfe-marketing/pricing">
+                  <Link to="/mfe-marketing">
                     <Button variant="contained" color="primary">
-                      Pricing
+                      Marketing-Mfe
                     </Button>
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to={routePath}>
-                    <Button variant="contained" color="primary">
-                      Checkout(mfe)
-                    </Button>
-                  </Link>
+                  <Link to="/mfe-order">
+                      <Button variant="contained" color="primary">
+                        Order-Mfe
+                      </Button>
+                    </Link>
                 </Grid>
               </Grid>
             </div>
@@ -139,3 +112,5 @@ export default function Album() {
     </React.Fragment>
   );
 }
+
+export default Home;

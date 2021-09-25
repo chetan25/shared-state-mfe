@@ -3,11 +3,12 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import { updateUser, useGlobalState } from './global-state/store';
 
-const MarketingApp = lazy(() => import('./components/marketing-app'));
-// const AuthApp = lazy(() => import('./components/auth-app'));
+const MarketingApp = lazy(() => import( /* webpackChunkName: "marketing" */ './components/marketing-app'));
+const OrderApp = lazy(() => import( /* webpackChunkName: "order" */ './components/order-app'));
 
 import Header from './components/header';
 import Loader from './components/loader';
+import Home from './components/Home';
 
 // to avoid name collision in production, we would prefix class names generated
 const generateClassName = createGenerateClassName({
@@ -16,6 +17,7 @@ const generateClassName = createGenerateClassName({
 
 const App = () => {
   const { user } = useGlobalState();
+  console.log('eweewewewe');
 
   useEffect(() => {
     updateUser(
@@ -28,7 +30,6 @@ const App = () => {
   }, []);
     
     const onNameChange = () => {
-      console.log({user});
       if (user && user.name === 'John') {
         updateUser(
           {
@@ -53,10 +54,9 @@ const App = () => {
               <Header onNameChange={onNameChange} />
               <Suspense fallback={<Loader />}>
                 <Switch>
-                  <Route path='/auth'>
-                    <h2>Test</h2>
-                  </Route>
-                  <Route path='/' component={MarketingApp} />
+                  <Route exact path='/' component={Home} />
+                  <Route path='/mfe-order' component={OrderApp} />
+                  <Route path='/mfe-marketing' component={MarketingApp} />
                 </Switch>
               </Suspense> 
           </div>

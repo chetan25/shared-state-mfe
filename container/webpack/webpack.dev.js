@@ -5,6 +5,9 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const packageJson = require('../package.json');
 
 const devConfig = {
+    entry: {
+        main: './src/index.js',
+    },
     mode: 'development',
     output: {
         publicPath: 'http://localhost:8080/'
@@ -13,6 +16,11 @@ const devConfig = {
         port: 8080,
         contentBase: '../public',
         historyApiFallback: true,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+          }
         // historyApiFallback: {
         //     index: 'index.html'
         // }
@@ -25,8 +33,8 @@ const devConfig = {
             name: 'container',
             filename: 'remoteEntry.js',
             remotes: {
-                'marketing': 'marketing@http://localhost:8081/remoteEntry.js',
-                // 'auth': 'auth@http://localhost:8082/remoteEntry.js'
+                'order': 'order@http://localhost:8082/remoteOrderEntry.js',
+                'marketing': 'marketing@http://localhost:8081/remoteMarketingEntry.js'
             },
             exposes: {
                 './GlobalState': './src/global-state/global-state'

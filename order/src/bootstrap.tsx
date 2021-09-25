@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createMemoryHistory, createBrowserHistory } from 'history';
-import MarketingApp from './app';
+import OrderApp from './app';
 
 interface LocationProp {
     hash: string;
@@ -17,16 +17,15 @@ interface MountOptions {
     onAuthChange?: (user: {email: string} | null) => void;
 }
 
-// mounts the Marketing App
-const mountMarketing = (element: HTMLElement, options?: MountOptions) => {
-    console.log({options});
+// mounts the order App
+const mountOrder = (element: HTMLElement, options?: MountOptions) => {
     const history = options?.defaultHistory ? options.defaultHistory : createMemoryHistory({
         //MemoryHistory Object we created would by default use '/' as initial route,
-        // so when we navigate from a main route to '/mfe-marketing' the MemoryHistory of Marketing
+        // so when we navigate from a main route to '/mfe-order' the MemoryHistory of Order
         //  would not pick that route,
         // since for the first time it would get initialized with '/'.
-        //  To fix this we need to set the initial route for this to be '/mfe-marketing'
-        initialEntries: [options?.initialPath || '/mfe-marketing']
+        //  To fix this we need to set the initial route for this to be '/mfe-order'
+        initialEntries: [options?.initialPath || '/mfe-order']
     });
 
     if (options) {
@@ -34,14 +33,16 @@ const mountMarketing = (element: HTMLElement, options?: MountOptions) => {
     }
     /** Render to DOM **/
     ReactDOM.render(
-        <MarketingApp history={history} />,
+        <OrderApp history={history} />,
         element
     );
 
-    // for container to update marketing app
+    // for container to update order app
     return {
         onContainerNavigate({pathname: newContainerPath}: LocationProp) {
+            console.log('order')
             const { pathname } = history.location;
+            console.log(pathname, newContainerPath);
             if (pathname !== newContainerPath) {
                 history.push(newContainerPath);
             }
@@ -52,11 +53,11 @@ const mountMarketing = (element: HTMLElement, options?: MountOptions) => {
 // check for running in development mode, used for standalone
 if (process.env.NODE_ENV === 'development') {
     const history = createBrowserHistory();
-    const element = document.querySelector('#marketing-dev') as HTMLElement;
+    const element = document.querySelector('#order-dev') as HTMLElement;
     if (element) {
-        mountMarketing(element, {defaultHistory: history});
+        mountOrder(element, {defaultHistory: history});
     }
 }
 
 // used by Container App to load the Micro FE
-export { mountMarketing };
+export { mountOrder };

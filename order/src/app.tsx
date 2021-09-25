@@ -13,14 +13,14 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'mrk'
 });
 
-interface MarketingAppProps {
+interface OrderAppProps {
   history: MemoryHistory;
 }
 
-const MarketingApp = ({history}: MarketingAppProps) => {
+const OrderApp = ({history}: OrderAppProps) => {
   useEffect(() => {
     const unSub = subscribeToGlobalState((state: Object) => {
-      console.log('marketing', state)
+      console.log('order', state)
     });
 
     return () => { unSub() };
@@ -53,4 +53,4 @@ const MarketingApp = ({history}: MarketingAppProps) => {
   );
 };
 
-export default MarketingApp;
+export default OrderApp;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useState, useMemo} from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -37,26 +37,12 @@ const useStyles = makeStyles((theme) => ({
   heroButtons: {
     marginTop: theme.spacing(4),
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
 }));
+
 
 export default function Album() {
   const [user, setUser] = useState<{name: string} | undefined>();
@@ -64,18 +50,18 @@ export default function Album() {
   const classes = useStyles();
 
   const routePath = useMemo(() => {
-      const allRoutes = getAppRoutes();
-      const order = allRoutes.filter((rt: {app: string, routes: any }) => rt.app == 'order');
-      if (order) {
-        //@ts-ignore
-        return order[0].routes.checkout;
-      }
-      return '/mfe-marketing/pricing' 
+    const allRoutes = getAppRoutes();
+    const marketing = allRoutes.filter((rt: {app: string, routes: any }) => rt.app == 'marketing');
+    if (marketing) {
+      //@ts-ignore
+      return marketing[0].routes.pricing;
+    }
+    return '/mfe-marketing/pricing' 
   }, []);
-
+ 
   useEffect(() => {
     const unSub = subscribeToGlobalState((state: {user: {name: string}}) => {
-      console.log('marketing', state);
+      console.log('order', state);
       const currentUser = state ? state.user : undefined;
       setUser(currentUser);
     });
@@ -96,22 +82,21 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Marketing App 
-             Current User --- {user ? user.name : ''}
+              Order Mfe - Current User --- {user ? user.name : ''}
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Link to="/mfe-marketing/pricing">
+                  <Link to="/mfe-order/checkout">
                     <Button variant="contained" color="primary">
-                      Pricing
+                      Checkout
                     </Button>
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link to={routePath}>
                     <Button variant="contained" color="primary">
-                      Checkout(mfe)
+                      Pricing
                     </Button>
                   </Link>
                 </Grid>

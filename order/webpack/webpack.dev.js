@@ -7,14 +7,14 @@ const packageJson = require('../package.json');
 const devConfig = {
     entry: {
         main: './src/index.js',
-        marketingAppRoutes: './src/exposeRoutes.js'
+        orderAppRoutes: './src/exposeRoutes.js'
     },
     mode: 'development',
     output: {
-        publicPath: 'http://localhost:8081/'
+        publicPath: 'http://localhost:8082/'
     },
     devServer: {
-        port: 8081,
+        port: 8082,
         contentBase: '../public',
         historyApiFallback: true,
         headers: {
@@ -31,13 +31,13 @@ const devConfig = {
             template: './public/index.html'
         }),
         new ModuleFederationPlugin({
-            name: 'marketing',
-            filename: 'remoteMarketingEntry.js',
+            name: 'order',
+            filename: 'remoteOrderEntry.js',
             remotes: {
                 'container': 'container@http://localhost:8080/remoteEntry.js',
             },
             exposes: {
-                './MarketingApp': './src/bootstrap'
+                './OrderApp': './src/bootstrap'
             },
             // shared: ['react', 'react-dom']
             shared: packageJson.dependencies // optional way to list all dependencies as shared
