@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +7,8 @@ import Container from '@material-ui/core/Container';
 import MaterialLink from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
 import globalStoreInstance from '../global-state/store';
-import { useSnapshot } from 'valtio'
+import { useSnapshot } from 'valtio';
+import { updateUser, subscribeToGlobalState} from 'global-state';
 
 function Copyright() {
   return (
@@ -46,6 +47,22 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const {user} = useSnapshot(globalStoreInstance);
+  const [globalUser, setGlobalUser] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const unSub = subscribeToGlobalState(state => {
+      console.log('global State in Container', state);
+      const currentUser = state ? state.user : null;
+      setGlobalUser(currentUser);
+    });
+
+    return () => {
+      unSub();
+    }
+  }, []);
 
   const classes = useStyles();
 
@@ -62,7 +79,25 @@ const Home = () => {
               color="textPrimary"
               gutterBottom
             >
-              Container App Dummy User --- {user ? user.name : ''}
+              Container App
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              State at Runtime from Container - User --- {user ? user.name : ''}
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              State from Global Lib - User --- {globalUser ? globalUser.name : ''}
             </Typography>
             <Typography
               variant="h5"

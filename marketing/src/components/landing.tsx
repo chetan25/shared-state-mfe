@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import MaterialLink from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
 import { subscribeToGlobalState, getAppRoutes } from 'container/GlobalState';
+import { updateUser, subscribeToGlobalState as subGlobalState} from 'global-state';
 
 function Copyright() {
   return (
@@ -60,7 +61,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album() {
   const [user, setUser] = useState<{name: string} | undefined>();
+  const [globalUser, setGlobalUser] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
 
+  
   const classes = useStyles();
 
   const routePath = useMemo(() => {
@@ -74,6 +80,16 @@ export default function Album() {
   }, []);
 
   useEffect(() => {
+    const unSub = subGlobalState((state) => {
+      console.log('Global lib state Marketing', state);
+      const currentUser = state ? state.user : null;
+      setGlobalUser(currentUser);
+    });
+
+    return () => { unSub() };
+  }, []);
+
+  useEffect(() => {
     const unSub = subscribeToGlobalState((state: {user: {name: string}}) => {
       console.log('marketing', state);
       const currentUser = state ? state.user : undefined;
@@ -82,6 +98,7 @@ export default function Album() {
 
     return () => { unSub() };
   }, []);
+
 
   return (
     <React.Fragment>
@@ -97,7 +114,38 @@ export default function Album() {
               gutterBottom
             >
               Marketing App 
-             Current User --- {user ? user.name : ''}
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              State at Runtime from Container - User --- {user ? user.name : ''}
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              State from Global lib - User --- {globalUser ? globalUser.name : ''}
+              <Button
+                 variant="contained"
+                 color="primary"
+                 onClick={
+                   () => {
+                    updateUser({
+                      name: 'Shaktiman',
+                      id: '11111'
+                    })
+                   }
+                 }
+              >
+                      Update Global State
+              </Button>
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">

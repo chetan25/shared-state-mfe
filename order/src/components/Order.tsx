@@ -82,7 +82,16 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Order Mfe - Current User --- {user ? user.name : ''}
+              Order Mfe 
+            </Typography>
+            <Typography
+              component="h4"
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              State at runitime from Container User --- {user ? user.name : ''}
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">

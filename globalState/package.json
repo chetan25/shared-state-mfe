@@ -1,0 +1,22 @@
+{
+  "name": "global-state",
+  "version": "1.1.0",
+  "description": "",
+  "main": "./dist/global-state.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.json --declaration --outDir dist"
+  },
+  "author": "Chetan Dasauni",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4",
+    "@types/node": "^14.14.41"
+  },
+  "dependencies": {
+    "valtio": "^1.2.2"
+  }
+}

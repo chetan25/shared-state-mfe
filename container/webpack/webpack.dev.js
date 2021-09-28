@@ -40,7 +40,21 @@ const devConfig = {
                 './GlobalState': './src/global-state/global-state'
             },
             // shared: ['react', 'react-dom']
-            shared: packageJson.dependencies // optional way to list all dependencies as shared
+            shared: [
+                {
+                    ...packageJson.dependencies,
+                    'global-state': {
+                        import: "global-state",
+                        singleton: true,
+                    }
+                },
+                //    {
+                //     './src/global-state/shared-context': {
+                //         import: './src/global-state/shared-context',
+                //         singleton: true,
+                //     }
+                // './src/global-state/shared-context-2'
+            ], // optional way to list all dependencies as shared
         })
     ]
 }
